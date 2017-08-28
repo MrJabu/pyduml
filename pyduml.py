@@ -34,8 +34,8 @@ def main():
         generate_update_packets()
         write_packet(packet_1) # Enter upgrade mode (delete old file if exists) 
         write_packet(packet_2) # Enable Reporting
-        upload_binary()
         write_packet(packet_3) # Send File size
+        upload_binary()
         write_packet(packet_4) # Send MD5 Hash for verification and Start Upgrade
     elif device == 4:
         doSparkRc()
@@ -54,29 +54,29 @@ def platform_detection():
     return sysOS
 
 def device_selection_prompt():
-	global device
-	device = input('\nSelect device number as follows: Aircraft = [1], RC = [2], Goggles = [3], SparkRC = [4]: ')
-	if device == 1:
-	    print ("Exploit for Aircraft selected")
-	elif device == 2:
-	    print ("Exploit for RC selected")
-	    print ("----------------------")
-	    print ("Rooting RC is finicky, if having difficulties try the following")
-	    print ("--------------------------------------------------------------------------")
-	    print ("after root completes:")
-	    print ("1: unplug before turning off")
-	    print ("2: turn off")
-	    print ("3: turn on (without usb connected)")
-	    print ("4: turn off")
-	    print ("5: plug in usb and turn on")
+    global device
+    device = input('\nSelect device number as follows: Aircraft = [1], RC = [2], Goggles = [3], SparkRC = [4]: ')
+    if device == 1:
+        print ("Exploit for Aircraft selected")
+    elif device == 2:
+        print ("Exploit for RC selected")
+        print ("----------------------")
+        print ("Rooting RC is finicky, if having difficulties try the following")
+        print ("--------------------------------------------------------------------------")
+        print ("after root completes:")
+        print ("1: unplug before turning off")
+        print ("2: turn off")
+        print ("3: turn on (without usb connected)")
+        print ("4: turn off")
+        print ("5: plug in usb and turn on")
 
-	elif device == 3:
-	    print ("Exploit for Goggles selected")	
+    elif device == 3:
+        print ("Exploit for Goggles selected")  
 
-	elif device == 4:
-		print("Spark RC selected")
-	print ("--------------------------------------------------------------------------")    
-	return
+    elif device == 4:
+        print("Spark RC selected")
+    print ("--------------------------------------------------------------------------")    
+    return
 
 def find_port():
     try:
@@ -120,11 +120,11 @@ def configure_usbserial():
     return
 
 def configure_socket():
-	global s
-	TCP_IP = '192.168.1.1'
-	TCP_PORT = 19003
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect((TCP_IP, TCP_PORT))
+    global s
+    TCP_IP = '192.168.1.1'
+    TCP_PORT = 19003
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((TCP_IP, TCP_PORT))
 
 def write_packet(data):
     ser.write(data)     # write a string
@@ -186,7 +186,7 @@ def upload_binary():
     print("Opening FTP connection to 192.168.42.2...\n")
     ftp = FTP("192.168.42.2", "Gimme", "DatROot!")
     fh = open(str(firmware_file), 'rb')
-    ftp.set_pasv(True)	# this is the fix for buggy ftp uploads we ran into in early days -jayemdee
+    ftp.set_pasv(True)  # this is the fix for buggy ftp uploads we ran into in early days -jayemdee
     ftp.storbinary('STOR /upgrade/dji_system.bin', fh)
     print (str(firmware_file) + " uploaded to FTP with a remote file size of: " + str(ftp.size("/upgrade/dji_system.bin")))
     ftp.cwd('upgrade')
@@ -195,7 +195,7 @@ def upload_binary():
     else :
         print("Creating /upgrade/.bin directory...\n")
         ftp.mkd("/upgrade/.bin")
-	
+    
     fh.close()
     ftp.quit()        
     return
@@ -307,7 +307,7 @@ def generate_update_packets():
         crc = calc_checksum(packet_4,packet_length)
         crc = struct.pack('<H',crc)
         packet_4 += crc
-		
+        
     else:
         sys.exit("Invalid Selection. Exiting.\n")
 
@@ -370,7 +370,7 @@ def calc_pkt55_hdr_checksum(seed, packet, plength):
     chksum = seed
     for i in range(0, plength):
         chksum = arr_2A103[((packet[i] ^ chksum) & 0xFF)];
-    return chksum	
-	
+    return chksum   
+    
 if __name__ == "__main__":
     main()
